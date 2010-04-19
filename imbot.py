@@ -6,6 +6,9 @@ from twisted.internet import protocol, reactor
 from patterns import pattern_list
 
 class IMBot(irc.IRCClient):
+    def signedOn(self):
+        self.join(self.factory.channel)
+
     def _get_nickname(self):
         return self.factory.nickname
     nickname = property(_get_nickname)
