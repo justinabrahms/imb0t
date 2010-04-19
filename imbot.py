@@ -15,7 +15,7 @@ class IMBot(irc.IRCClient):
 
     def privmsg(self, user, channel, msg):
         for regex, func in pattern_list:
-            match = regex.match(msg)
+            match = regex.search(msg)
             if match:
                 func(self, user, channel, msg, match.groups())
 

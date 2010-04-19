@@ -8,5 +8,5 @@ def pattern(regexp, callable_path):
     return (re.compile(regexp), func)
 
 pattern_list = (
-    pattern(r'.* ([A-Z]+-[0-9]+) .*', 'basic.handle_jira'),
+    pattern(r'([A-Z]+-[0-9]+)', 'basic.handle_jira'),
 )
