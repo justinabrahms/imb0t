@@ -7,7 +7,8 @@ from patterns import pattern_list
 
 class IMBot(irc.IRCClient):
     def signedOn(self):
-        self.join(self.factory.channel)
+        for chan in self.factory.channel_list:
+            self.join(chan)
 
     def _get_nickname(self):
         return self.factory.nickname
@@ -22,8 +23,8 @@ class IMBot(irc.IRCClient):
 class IMBotFactory(protocol.ClientFactory):
     protocol = IMBot
 
-    def __init__(self, channel, nickname='imb0t'):
-        self.channel = channel
+    def __init__(self, channel_list, nickname='imb0t'):
+        self.channel_list = channel_list
         self.nickname = nickname
         self.JIRA_regex = re.compile(r'([A-Z]{2,4}-[0-9]+)')
 
@@ -36,6 +37,6 @@ class IMBotFactory(protocol.ClientFactory):
 
 
 if __name__ == '__main__':
-    chan = sys.argv[1]
-    reactor.connectTCP('irc.freenode.net', 6667, IMBotFactory('#%s' % chan))
+    chan_list = sys.argv[1:]
+    reactor.connectTCP('irc.freenode.net', 6667, IMBotFactory(['#%s' % chan for chan in chan_list]))
     reactor.run()
