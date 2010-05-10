@@ -20,6 +20,13 @@ class IMBot(irc.IRCClient):
             if match:
                 func(self, user, channel, msg, match.groups())
 
+    def action(self, user, channel, msg):
+        msg = '* %s %s' % (user, msg)
+        for regex, func in pattern_list:
+            match = regex.search(msg)
+            if match:
+                func(self, user, channel, msg, match.groups())
+
 class IMBotFactory(protocol.ClientFactory):
     protocol = IMBot
 
