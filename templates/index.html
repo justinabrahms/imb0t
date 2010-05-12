@@ -1,0 +1,10 @@
+<h1>Testing...</h1>
+{% if channel_list %}
+  <ul>
+  {% for chan in channel_list %}
+    <li><a href="/{{ chan.name }}/">{{ chan.name }}</a></li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <h2>Fooey!</h2>
+{% endif %}
