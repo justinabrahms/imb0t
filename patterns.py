@@ -9,4 +9,5 @@ def pattern(regexp, callable_path):
 
 pattern_list = (
     pattern(r'([A-Z]+-[0-9]+)', 'basic.handle_jira'),
+    pattern(r'(.*)', 'database_logger.log_message'),
 )
