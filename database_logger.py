@@ -1,4 +1,4 @@
-import datetime
+import datetime, time
 from elixir import *
 from elixir.options import using_options
 
@@ -18,15 +18,20 @@ class Message(Entity):
     message = Field(UnicodeText)
     timestamp = Field(DateTime, default=datetime.datetime.now)
 
+    @property
+    def pretty_date(self):
+        return time.strftime('%H:%M on %m/%d/%y', self.timestamp.timetuple())
+
     def __repr__(self):
         return "<Message from %s>" % self.user
 
 # Message Handler
 def log_message(bot, user, channel_name, msg, groups):
-    setup_all(True)
-    user = user.split('!')[0]
     if channel_name[0] != '#': # notice or direct message
         return
+    user = user.split('!')[0]
+    channel_name = channel_name.lstrip('#')
+    setup_all(True)
     chan = Channel.get_by(name=channel_name)
     if not chan:
         chan = Channel(name=channel_name)
