@@ -5,7 +5,7 @@ var client = new irc.Client('irc.freenode.net', 'imb0t', {
                               channels: ['#botwars', '#flood']
                             });
 
-pattern_list = [
+var pattern_list = [
   {
     rxp: /([A-Z]+-[0-9]+)/g,
     func: function (from, to, message, matches) {
@@ -15,6 +15,8 @@ pattern_list = [
     }
   }
 ];
+
+exports.pattern_list = pattern_list;
 
 client.addListener(
   'pm',
