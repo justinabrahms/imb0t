@@ -9,7 +9,9 @@ pattern_list = [
   {
     rxp: /([A-Z]+-[0-9]+)/g,
     func: function (from, to, message, matches) {
-      client.say(to, 'found: ' + matches);
+      for (var i; i < matches.length; i++) {
+        client.say(to, 'http://jira.invitemedia.com/browse/' + matches[i]);
+      }
     }
   }
 ];
