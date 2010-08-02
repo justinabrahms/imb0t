@@ -1,37 +1,51 @@
 var irc = require('irc');
 var sys = require('sys');
 
-var client = new irc.Client('irc.freenode.net', 'imb0t', {
-                              channels: ['#botwars', '#flood']
-                            });
-
-var pattern_list = [
-  {
-    rxp: /([A-Z]+-[0-9]+)/g,
-    func: function (from, to, message, matches) {
-      for (var i; i < matches.length; i++) {
-        client.say(to, 'http://jira.invitemedia.com/browse/' + matches[i]);
-      }
+var imb0t = function () {
+  return {
+    pattern_list: [],
+    client: undefined,
+    connectClient: function (server, nick, chan_list) {
+      pattern_list = this.pattern_list;
+      this.nick = nick;
+      var client = new irc.Client(server, nick, {channels: chan_list});
+      this.client = client;
+      this.client.addListener(
+        'message',
+        function (from, to, message) {
+          for(var i = 0; i < pattern_list.length; i++) {
+            var matches = message.match(pattern_list[i].rxp);
+            if (matches) {
+              pattern_list[i].func(client, from, to, message, matches);
+            }
+          }
+        });
+    },
+    register: function (_rgxp, _func) {
+      this.pattern_list.push({rxp:_rgxp, func:_func});
     }
-  }
-];
+  };
+};
+exports.imbot = imb0t;
 
-exports.pattern_list = pattern_list;
+if (module.parent === undefined)  {
+  var bot = new imb0t;
+  bot.connectClient('irc.freenode.net', 'imb0t', ['#botwars']);
 
-client.addListener(
-  'pm',
-  function(from, message) {
-    client.say(from, 'Sorry, I don\'t speak privately.');
-  });
+  bot.register(/([A-Z]+-[0-9]+)/g, function jira_link (client, from, to, message, matches) {
+                 for (var i = 0; i < matches.length; i++) {
+                   client.say(to, 'http://jira.invitemedia.com/browse/' + matches[i]);
+                 }
+               });
 
-client.addListener(
-  'message',
-  function (from, to, message) {
-    for(var i = 0; i < pattern_list.length; i++) {
-      var matches = message.match(pattern_list[i].rxp);
-      if (matches) {
-        pattern_list[i].func(from, to, message, matches);
-      }
-      sys.puts(from + ' => '+ to +': ' + message);
-    }
-  });
+  bot.register(/(.*)/, function no_private_msg(client, from, to, msg, matches) {
+                 if (to == this.nick) {
+                   client.say(from, "I don't speak privately.");
+                 }
+               });
+
+  bot.register(/(.*)/, function echo(client, from, to, msg, matches) {
+                 console.log(from + " => " + to + ": " + msg);
+               });
+
+}

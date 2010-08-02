@@ -2,20 +2,30 @@ var vows = require('vows'),
     assert = require('assert');
 
 var imbot = require('/home/jlilly/src/imb0t/js/imbot');
-var pattern_list = imbot.pattern_list;
+var imb = new imbot.imbot;
+var pattern_list = imb.pattern_list;
 
-vows.describe('imb0t').addBatch({
+vows.describe('imbot').addBatch({
     'The pattern list': {
-      topic: pattern_list,
+      topic: imb.pattern_list,
       'is an array': function (list) {
         assert.isArray(list);
       },
       'contains objects': function (list) {
-        assert.isTrue(list.length != 0);
+        assert.isTrue(list.length == 0);
+      },
+      'is added to upon registering something': function (list) {
+        imb.register(/a/, function () {});
+        assert.isTrue(list.length == 1);
+        list.shift(); // cleanup
       }
-    },
+    }
+}).addBatch({
     'The pattern object': {
-      topic: pattern_list[0],
+      topic: function () {
+        imb.register(/a/, function () {}); 
+        return imb.pattern_list[0];
+      },
       'pattern is an object': function (pattern) {
         assert.isObject(pattern);
       },
@@ -27,4 +37,4 @@ vows.describe('imb0t').addBatch({
         assert.isFunction(pattern.func);
       }
     }
-});
+}).run();
