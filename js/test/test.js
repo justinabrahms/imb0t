@@ -40,4 +40,8 @@ vows.describe('imbot').addBatch({
         assert.isFunction(pattern.func);
       }
     }
-}).export(module, {reporter: require('../reporter')});
+}).export(module, {reporter: {
+                     'report': function () { sys.puts('blah');}
+                   }
+                  }
+         );
