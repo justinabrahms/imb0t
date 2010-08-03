@@ -4,7 +4,7 @@ var vows = require('vows'),
 
 // vows.options.reporter = require('../reporter');
 
-var imbot = require('/home/jlilly/src/imb0t/js/imbot');
+var imbot = require('../imbot');
 var imb = new imbot.imbot;
 var pattern_list = imb.pattern_list;
 
