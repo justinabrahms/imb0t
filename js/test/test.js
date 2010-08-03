@@ -2,8 +2,6 @@ var vows = require('vows'),
     assert = require('assert'),
     sys = require('sys');
 
-// vows.options.reporter = require('../reporter');
-
 var imbot = require('../imbot');
 var imb = new imbot.imbot;
 var pattern_list = imb.pattern_list;
@@ -38,10 +36,5 @@ vows.describe('imbot').addBatch({
       'has an associated function': function(pattern) {
         assert.isTrue(pattern.hasOwnProperty('func'));
         assert.isFunction(pattern.func);
-      }
-    }
-}).export(module, {reporter: {
-                     'report': function () { sys.puts('blah');}
-                   }
-                  }
-         );
+      }    }
+}).export(module, {reporter: require('../reporter')});
