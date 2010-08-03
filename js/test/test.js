@@ -1,5 +1,8 @@
 var vows = require('vows'),
-    assert = require('assert');
+    assert = require('assert'),
+    sys = require('sys');
+
+// vows.options.reporter = require('../reporter');
 
 var imbot = require('/home/jlilly/src/imb0t/js/imbot');
 var imb = new imbot.imbot;
@@ -37,4 +40,4 @@ vows.describe('imbot').addBatch({
         assert.isFunction(pattern.func);
       }
     }
-}).run();
+}).export(module, {reporter: require('../reporter')});
