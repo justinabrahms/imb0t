@@ -1,4 +1,4 @@
-var irc = require('../../node-irc/lib/irc.js');
+var irc = require('../../../node-irc/lib/irc.js');
 var sys = require('sys');
 
 var imb0t = function (options) {
@@ -9,8 +9,7 @@ var imb0t = function (options) {
         , client: undefined
         , connectClient: function (server, nick, chan_list) {
             this.nick = nick;
-            var client = new irc.Client(server, nick, {channels: chan_list});
-            this.client = client;
+            this.client = new irc.Client(server, nick, {channels: chan_list});
             this.client.addListener('message', this.handleMessage);
         }
         , handleMessage: function(from, to, message) {
@@ -30,6 +29,8 @@ var imb0t = function (options) {
             plugin.callbacks.forEach(function(callback) {
                 this.register(callback.re, callback.fn);
             }, this);
+            bot.state[plugin.name] = plugin.state;
+        
         }
         , connect: function () {
             this.connectClient(options['server'], options['nick'], options['channel']);
@@ -40,11 +41,6 @@ var imb0t = function (options) {
             bot.register_plugin(plugin);
         });
     };
-    if (options.plugin_config !== undefined) {
-        for (var plugin in options.plugin_config) {
-            // Need to properly merge plugin configs
-        }
-    }
     return bot;
 };
 exports.imbot = imb0t;

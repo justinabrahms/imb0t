@@ -1,12 +1,14 @@
 // expresso tests
-var imbot = require('../imbot.js').imbot,
+var imbot = require('../lib/imbot.js').imbot,
 assert = require('assert');
 
-function generate_plugin() {
+function generate_plugin(state_obj) {
     return {
+        name: 'test',
         callbacks: [
           {'re': /.*/, 'fn': function () {}}
-        ]
+        ],
+        state: state_obj
     };
 }
 
@@ -74,5 +76,17 @@ module.exports = {
         assert.equal('irc.freenode.net', args['0'], "Server wasn't passed in as first param.");
         assert.equal('imb0t', args['1'], "nick wasn't properly passed in.");
         assert.equal('#botwars', args['2'], "channel wasn't properly passed in.");
+    }
+    , 'test plugin state merges into bot': function () {
+        var val = {
+            'key':1
+        };
+        var options = {
+            plugin_list: [
+                generate_plugin(val)
+            ]
+        };
+        var bot = new imbot(options);
+        assert.equal(val, bot.state['test']);
     }
 };
