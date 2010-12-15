@@ -64,7 +64,7 @@ module.exports = {
     }
     , 'test connect passes in proper args to connectClient': function() {
         var options = {
-            channel: '#botwars'
+            channels: ['#botwars']
             , nick: 'imb0t'
             , server: 'irc.freenode.net'
         };
@@ -75,7 +75,7 @@ module.exports = {
 
         assert.equal('irc.freenode.net', args['0'], "Server wasn't passed in as first param.");
         assert.equal('imb0t', args['1'], "nick wasn't properly passed in.");
-        assert.equal('#botwars', args['2'], "channel wasn't properly passed in.");
+        assert.eql(['#botwars'], args['2'], "channel wasn't properly passed in.");
     }
     , 'test plugin state merges into bot': function () {
         var val = {

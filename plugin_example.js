@@ -1,17 +1,13 @@
-var irc   = require('../node-irc/lib/irc.js')
-    , imbot = require('./imbot.js').plugin
-    , logging = require('imbot-logging.js')
-    , sys = require('sys')
-    , fs = require('fs')
-    , opts = require('../tav');
+var imbot = require('./lib/imbot.js').imbot
+    , logging = require('./imbot-logging.js');
 
 if (module.parent === undefined) {
     // option parsing bits.
     var options = {
         'plugin_list': [
-          logging
+          logging.plugin
         ]
-        , 'channel': '#pycon-pc'
+        , 'channels': ['#pycon-pc']
         , 'server': 'irc.freenode.net'
         , 'nick': 'pyc0n'
         , 'plugin_config' : {
@@ -21,5 +17,6 @@ if (module.parent === undefined) {
         }
     };
     var bot = new imbot(options);
+    console.log("Connecting...");
     bot.connect();
 }
