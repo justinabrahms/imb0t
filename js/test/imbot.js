@@ -38,7 +38,7 @@ module.exports = {
         assert.ok(first_match_called, "First matching callback was not called.");
         assert.ok(second_match_called, "Second matching callback was not called.");
         assert.ok(unmatched_uncalled, "Unmatched callback was mistakenly called.");
-        
+     
     }
     , 'test registering a plugin increases pattern_list size': function () {
         var bot = new imbot({});
@@ -89,4 +89,35 @@ module.exports = {
         var bot = new imbot(options);
         assert.equal(val, bot.state['test']);
     }
+    ,'test valid plugin callbacks are called': function () {
+        var called = false;
+        var options = {
+            plugin_list: [
+                {
+                    name:'test_plugin'
+                    , callbacks: [{re:/.*/, fn: function () {called = true;}}]
+                }
+            ]
+        };
+        var bot = new imbot(options);
+        bot.handleMessage('zim', 'zam', 'zappo');
+        assert.ok(called);
+        
+    }
+    ,'test invalid plugin callbacks arent called': function () {
+        var called = false;
+        var options = {
+            plugin_list: [
+                {
+                    name:'test_plugin'
+                    , callbacks: [{re:/f/, fn: function () {called = true;}}]
+                }
+            ]
+        };
+        var bot = new imbot(options);
+        bot.handleMessage('zim', 'zam', 'zappo');
+        assert.ok(called === false);
+        
+    }
+    // , 'foo': function () {}
 };
