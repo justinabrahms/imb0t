@@ -2,14 +2,14 @@ var imbot = require('./lib/imbot.js').imbot
     , logging = require('./imbot-logging.js');
 
 if (module.parent === undefined) {
-    // option parsing bits.
+        // option parsing bits.
     var options = {
         'plugin_list': [
           logging.plugin
         ]
-        , 'channels': ['#pycon-pc']
+        , 'channels': ['#foooz']
         , 'server': 'irc.freenode.net'
-        , 'nick': 'pyc0n'
+        , 'nick': 'imb0t'
         , 'plugin_config' : {
             'logging': {
                 'log_dir': '/tmp/bot.log'
